@@ -1,1 +1,9 @@
-A PyTorch replication of DDPM (Ho, Jain & Abbeel, 2020) on CIFAR-10, restructured as a single-GPU, Colab-friendly pipeline. The core architecture, noise schedule, and training objective follow the original paper's design; the pipeline additionally uses several since-standard improvements v-prediction, cosine noise schedule, self-conditioning, min-SNR-γ loss weighting, and EMA  with DDIM sampling for faster generation. Modular scripts (ddpm_model.py, ddpm_train.py, ddpm_generate.py, ddpm_evaluate.py) handle training, sampling, and FID evaluation, with checkpoint auto-resume and optional Google Drive persistence for long Colab sessions.
+DDPM on CIFAR-10
+A PyTorch replication of Denoising Diffusion Probabilistic Models (Ho, Jain & Abbeel, 2020), trained on CIFAR-10 and packaged as a single-GPU, Colab-friendly pipeline.
+Note on scope: this is a replication of the DDPM framework, not a byte-exact reproduction of the original paper's setup. The core diffusion formulation and U-Net-style architecture follow the paper, but the pipeline also incorporates several improvements introduced in later work: v-prediction, a cosine noise schedule, self-conditioning, min-SNR-γ loss weighting, EMA, and DDIM sampling for faster inference. If you're benchmarking against the original paper's reported FID, keep this in mind.
+Pipeline:
+
+ddpm_model.py — architecture, noise schedule, DDIM sampler
+ddpm_train.py — training loop (single-process, checkpoint auto-resume)
+ddpm_generate.py — sampling from a checkpoint
+ddpm_evaluate.py — FID evaluation via torch-fidelity
