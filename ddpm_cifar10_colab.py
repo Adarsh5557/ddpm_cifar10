@@ -39,7 +39,7 @@ print("CUDA available:", torch.cuda.is_available())
 if torch.cuda.is_available():
     print("GPU:", torch.cuda.get_device_name(0))
 else:
-    print("⚠️  No GPU detected — go to Runtime > Change runtime type > GPU before continuing.")
+    print("No GPU detected — go to Runtime > Change runtime type > GPU before continuing.")
 
 """## 2. (Optional but recommended) Mount Google Drive
 
@@ -350,7 +350,7 @@ Architecture, cosine noise schedule, EMA, and the DDIM sampler — unchanged fro
 #             save_image(x[i].cpu(), f"{output_dir}/fake_{img_counter}.png")
 #             img_counter += 1
 # 
-#     print(f"✅ Images ready in '{output_dir}/'\n", flush=True)
+#     print(f"Images ready in '{output_dir}/'\n", flush=True)
 #
 
 """## 4. Write the training script (`ddpm_train.py`)
@@ -406,7 +406,7 @@ Single-GPU training loop with auto-resume from the latest checkpoint found in `C
 # 
 #     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #     if device.type == "cpu":
-#         print("⚠️  No GPU detected. In Colab go to Runtime > Change runtime type > "
+#         print("No GPU detected. In Colab go to Runtime > Change runtime type > "
 #               "GPU (T4). Training on CPU will be extremely slow.")
 # 
 #     # Noise schedule
@@ -458,7 +458,7 @@ Single-GPU training loop with auto-resume from the latest checkpoint found in `C
 #     start_epoch = 0
 #     latest_ckpt = find_latest_checkpoint(checkpoint_dir)
 #     if latest_ckpt:
-#         print(f"\n🔄 Found checkpoint! Resuming from {latest_ckpt}...\n")
+#         print(f"\nFound checkpoint! Resuming from {latest_ckpt}...\n")
 #         checkpoint = torch.load(latest_ckpt, map_location=device, weights_only=False)
 #         model.load_state_dict(checkpoint["model_state_dict"])
 #         ema_model.load_state_dict(checkpoint["ema_model_state_dict"])
@@ -466,7 +466,7 @@ Single-GPU training loop with auto-resume from the latest checkpoint found in `C
 #         for _ in range(start_epoch):
 #             scheduler.step()
 # 
-#     print("\n🚀 Starting training loop (single-GPU, mixed precision)...")
+#     print("\nStarting training loop (single-GPU, mixed precision)...")
 # 
 #     for epoch in range(start_epoch, epochs):
 #         model.train()
@@ -527,7 +527,7 @@ Single-GPU training loop with auto-resume from the latest checkpoint found in `C
 #                 "model_state_dict": model.state_dict(),
 #                 "ema_model_state_dict": ema_model.state_dict(),
 #             }, checkpoint_path)
-#             print(f"💾 Saved checkpoint: {checkpoint_path}")
+#             print(f"Saved checkpoint: {checkpoint_path}")
 # 
 #             generate_fid_samples_ddim(
 #                 model=ema_model,
@@ -539,7 +539,7 @@ Single-GPU training loop with auto-resume from the latest checkpoint found in `C
 #                 output_dir=f"fake_images_epoch_{epoch + 1}",
 #             )
 # 
-#     print("\n✅ Training complete.")
+#     print("\nTraining complete.")
 # 
 # 
 # if __name__ == "__main__":
@@ -564,15 +564,6 @@ Single-GPU training loop with auto-resume from the latest checkpoint found in `C
 #     )
 #
 
-"""## 5. Train
-
-This runs as a subprocess so you can stop the cell (■ button) at any time — your last checkpoint (saved every
-`--save_every` epochs) is safe, and re-running this cell will automatically resume from it.
-
-Adjust flags as needed:
-- `--epochs`: total epochs to train to (not epochs-per-session)
-- `--batch_size`: lower this (e.g. 32) if you hit a CUDA out-of-memory error on a T4
-- `--save_every`: how often (in epochs) to checkpoint + generate evaluation samples
 
 """
 
@@ -627,7 +618,7 @@ Adjust flags as needed:
 #         ddim_steps=ddim_steps,
 #         output_dir=output_dir,
 #     )
-#     print(f"✅ Done! Samples saved to '{output_dir}/'")
+#     print(f"Done! Samples saved to '{output_dir}/'")
 # 
 # 
 # if __name__ == "__main__":
@@ -709,17 +700,17 @@ plt.show()
 # 
 # def evaluate_single_epoch(epoch_num, min_images=10000):
 #     fake_dir = f"fake_images_epoch_{epoch_num}"
-#     print(f"\n🔬 Evaluating Epoch {epoch_num} (EMA weights)...")
+#     print(f"\n Evaluating Epoch {epoch_num} (EMA weights)...")
 # 
 #     if not os.path.exists(fake_dir):
-#         print(f"❌ Error: '{fake_dir}' does not exist.")
+#         print(f"Error: '{fake_dir}' does not exist.")
 #         return None
 # 
 #     images = [f for f in os.listdir(fake_dir) if f.lower().endswith((".png", ".jpg", ".jpeg"))]
 #     num_images = len(images)
 # 
 #     if num_images < min_images:
-#         print(f"⚠️ Warning: Found {num_images}/{min_images} images. Skipping.")
+#         print(f"Warning: Found {num_images}/{min_images} images. Skipping.")
 #         return None
 # 
 #     try:
@@ -732,16 +723,16 @@ plt.show()
 #             verbose=False,
 #         )
 #         fid_score = metrics["frechet_inception_distance"]
-#         print(f"✅ Epoch {epoch_num} FID Score: {fid_score:.4f}")
+#         print(f"Epoch {epoch_num} FID Score: {fid_score:.4f}")
 #         return fid_score
 #     except Exception as e:
-#         print(f"❌ Error during metrics calculation for Epoch {epoch_num}: {e}")
+#         print(f"Error during metrics calculation for Epoch {epoch_num}: {e}")
 #         return None
 # 
 # 
 # def main():
 #     print("=" * 60)
-#     print("🚀 AUTOMATED DDPM EMA-FID EVALUATION")
+#     print(" AUTOMATED DDPM EMA-FID EVALUATION")
 #     print("=" * 60)
 # 
 #     fid_results = {}
@@ -751,7 +742,7 @@ plt.show()
 #     else:
 #         epochs_to_test = get_available_epochs()
 #         if not epochs_to_test:
-#             print("❌ No 'fake_images_epoch_X' folders found.")
+#             print("No 'fake_images_epoch_X' folders found.")
 #             sys.exit(1)
 # 
 #     for ep in epochs_to_test:
@@ -761,18 +752,18 @@ plt.show()
 # 
 #     if fid_results:
 #         print("\n" + "=" * 50)
-#         print("📊 FID EVOLUTION SUMMARY (EMA MODELS)")
+#         print("FID EVOLUTION SUMMARY (EMA MODELS)")
 #         print("-" * 50)
 #         for ep in sorted(fid_results.keys()):
 #             score = fid_results[ep]
 #             if score < 10:
-#                 status = "🎯 GOAL REACHED"
+#                 status = " GOAL REACHED"
 #             elif score < 20:
-#                 status = "🔥 Excellent"
+#                 status = " Excellent"
 #             elif score < 50:
-#                 status = "✨ Good"
+#                 status = " Good"
 #             else:
-#                 status = "⚠️ Needs more training"
+#                 status = " Needs more training"
 #             print(f"Epoch {ep:<9}{score:<20.4f}  {status}")
 #         print("=" * 50)
 # 
